@@ -46,15 +46,25 @@ class PromoEmail extends Command
         switch ($environment) {
             // local
             case 'local':
-                $update_promo_email = $this->argument('status');
-                $this->info('promo:email Comando funziona correttamente - !'.$environment);
+
+                try {
+                    $update_promo_email = $this->argument('status');
+
+
+                    $this->info('promo:email Comando funziona correttamente - !'.$update_promo_email);
+                } catch (\Exception $e) {
+                    // Almacenamos la información del error.
+                    \Log::debug('Test var fails' . $e->getMessage());
+                }
+
+
                 break;
             // Dev
             case 'development':
                 //Funzione per interfacciarsi con il server di produzione
                 break;
 
-            default:
+            case 'staging':
                 //Funzione per interfacciarsi con il server di test
                 break;
         }

@@ -14,3 +14,20 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+/*Route::get('/foo', function () {
+    //Passiamo il valore status=1, email promozione inviata
+    Artisan::queue('promo:email', ['status' => 1]);
+
+});*/
+
+
+Route::get('/test', function()
+{
+    //Passiamo il valore status=1, email promozione inviata
+    Artisan::call('promo:email', ['status' => 100]);
+    dd(Artisan::output());
+});
+
+
