@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+
+
 class PromoEmail extends Command
 {
     /**
@@ -37,7 +39,24 @@ class PromoEmail extends Command
      */
     public function handle()
     {
-        $update_promo_email = $this->argument('status');
-        $this->info('promo:email Comando funziona correttamente - !'.$update_promo_email);
+        $app = app();
+        $environment = $app->environment();
+
+
+        switch ($environment) {
+            // local
+            case 'local':
+                $update_promo_email = $this->argument('status');
+                $this->info('promo:email Comando funziona correttamente - !'.$environment);
+                break;
+            // Dev
+            case 'development':
+                //Funzione per interfacciarsi con il server di produzione
+                break;
+
+            default:
+                //Funzione per interfacciarsi con il server di test
+                break;
+        }
     }
 }
