@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use DB;
-
+use Mail;
 use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 
@@ -76,6 +76,7 @@ class PromoEmail extends Command
                         // internal error
                         case 500:
                             \Log::alert('Errore 500' . $e->getMessage());
+                            $this->send_email($e->getMessage(),$e->getStatusCode());
                             break;
                         default:
                             $log = new Logger('name');
@@ -95,4 +96,12 @@ class PromoEmail extends Command
                 break;
         }
     }
+
+    public function send_email($e, $getStatusCode){
+        Mail::send('emails.exception', ['error' => $e->getMessage(), 'code' => $getStatusCode], function ($m) {
+            $m->to('email@email.com', 'Server Message')->subject('Error');
+        });
+    }
+
+
 }
