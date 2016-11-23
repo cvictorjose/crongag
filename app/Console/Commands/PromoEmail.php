@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Console\Commands;
-
 use Illuminate\Console\Command;
-
-
+use DB;
 
 class PromoEmail extends Command
 {
@@ -49,15 +47,25 @@ class PromoEmail extends Command
 
                 try {
                     $update_promo_email = $this->argument('status');
+                    //$this->info('promo:email Comando funziona correttamente - !'.$update_promo_email);
+
+                    $users = array();
+                    $users = DB::table('users')->where('status', 0)->orderBy('id', 'desc')->get();
 
 
-                    $this->info('promo:email Comando funziona correttamente - !'.$update_promo_email);
+                    foreach ($users as $user) {
+                        DB::table('users')
+                            ->where('id', $user->id)
+                            ->update(['status' => 1]);
+                        \Log::info('Email promozionale inviata:'.$user->email);
+                        $this->info('Email promozionale inviata:'.$user->email);
+                    }
+
+
                 } catch (\Exception $e) {
-                    // Almacenamos la información del error.
-                    \Log::debug('Test var fails' . $e->getMessage());
+                    // registrazione dell'informazione dell'errore generato.
+                    \Log::debug('Abbiamo questo errore' . $e->getMessage());
                 }
-
-
                 break;
             // Dev
             case 'development':

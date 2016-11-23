@@ -26,8 +26,12 @@ Route::get('/', function () {
 Route::get('/test', function()
 {
     //Passiamo il valore status=1, email promozione inviata
-    Artisan::call('promo:email', ['status' => 100]);
+    Artisan::call('promo:email', ['status' => 1]);
     dd(Artisan::output());
 });
 
 
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
