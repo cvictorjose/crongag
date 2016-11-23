@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use DB;
 
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
+
 class PromoEmail extends Command
 {
     /**
@@ -64,7 +67,22 @@ class PromoEmail extends Command
 
                 } catch (\Exception $e) {
                     // registrazione dell'informazione dell'errore generato.
-                    \Log::debug('Abbiamo questo errore' . $e->getMessage());
+
+                    switch ($e->getStatusCode()) {
+                        // not found
+                        case 404:
+                            \Log::warning('Errore 404' . $e->getMessage());
+                            break;
+                        // internal error
+                        case 500:
+                            \Log::alert('Errore 500' . $e->getMessage());
+                            break;
+                        default:
+                            $log = new Logger('name');
+                            $log->pushHandler(new RotatingFileHandler(storage_path().'/logs/debug/debug.log',2,Logger::INFO));
+                            $log->info($e->getMessage());
+                            break;
+                    }
                 }
                 break;
             // Dev
