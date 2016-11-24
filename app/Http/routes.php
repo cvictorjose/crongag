@@ -28,6 +28,10 @@ Route::get('/test', function()
     //Passiamo il valore status=1, email promozione inviata
     Artisan::call('promo:email', ['status' => 1]);
     dd(Artisan::output());
+
+  //Passiamo 2 o più valori
+    //P Artisan::call('promo:email', ['status' => 1, '--promozione'=>1]);
+    //P dd(Artisan::output());
 });
 
 
